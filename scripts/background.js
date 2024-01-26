@@ -1,14 +1,12 @@
 export default class Background {
-  constructor(x, y, s) {
+  constructor(x, y, s, player) {
     this.x = x;
-    this.delayX = this.x;
-    this.delayY = this.y;
     this.y = y;
-    this.width = 100;
-    this.height = 100;
+    this.width = 150;
+    this.height = 60;
     this.speed = s;
-    this.collision = "None";
-    this.direction = "None";
+    this.player = player;
+    this.isColliding = false;
     document.addEventListener("keydown", this.keydown);
     document.addEventListener("keyup", this.keyup);
   }
@@ -16,60 +14,27 @@ export default class Background {
     this.move();
     ctx.strokeStyle = "white";
     ctx.strokeRect(this.x, this.y, this.width, this.height);
-    ctx.fillStyle = "green";
+    ctx.fillStyle = "gray";
     ctx.fillRect(this.x, this.y, this.width, this.height);
     ctx.fillStyle = "white";
     ctx.font = "20px Monospace";
-    ctx.fillText("trap", this.x, this.y + 15);
+    ctx.fillText("decoration", this.x, this.y + 15);
   }
   move() {
-    this.delayY = this.y;
-    this.delayX = this.x;
-    if (this.upPressed == true && this.collision !== "Bottom") {
+    if (this.upPressed == true && this.player.collision !== "Top") {
       this.y += this.speed;
     }
-    if (this.downPressed == true && this.collision !== "Top") {
+    if (this.downPressed == true && this.player.collision !== "Bottom") {
       this.y -= this.speed;
     }
-    if (this.leftPressed == true && this.collision !== "Right") {
+    if (this.leftPressed == true && this.player.collision !== "Left") {
       this.x += this.speed;
     }
-    if (this.rightPressed == true && this.collision !== "Left") {
+    if (this.rightPressed == true && this.player.collision !== "Right") {
       this.x -= this.speed;
-    }
-
-    switch (true) {
-      case this.delayY < this.y && this.delayX == this.x:
-        this.direction = "Up";
-        break;
-      case this.delayY < this.y && this.delayX > this.x:
-        this.direction = "UpRight";
-        break;
-      case this.delayY == this.y && this.delayX > this.x:
-        this.direction = "Right";
-        break;
-      case this.delayY > this.y && this.delayX > this.x:
-        this.direction = "DownRight";
-        break;
-      case this.delayY > this.y && this.delayX == this.x:
-        this.direction = "Down";
-        break;
-      case this.delayY > this.y && this.delayX < this.x:
-        this.direction = "DownLeft";
-        break;
-      case this.delayY == this.y && this.delayX < this.x:
-        this.direction = "Left";
-        break;
-      case this.delayY < this.y && this.delayX < this.x:
-        this.direction = "UpLeft";
-        break;
-      case this.delayY == this.y && this.delayX == this.x:
-        this.direction = "None";
-        break;
     }
   }
   keydown = (e) => {
-    // console.log(e);
     if (e.code === "KeyW") {
       this.upPressed = true;
     }
