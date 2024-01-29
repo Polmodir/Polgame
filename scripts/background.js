@@ -1,12 +1,11 @@
 export default class Background {
-  constructor(x, y, s, player) {
+  constructor(x, y, s, movement) {
     this.x = x;
     this.y = y;
     this.width = 150;
     this.height = 60;
     this.speed = s;
-    this.player = player;
-    this.isColliding = false;
+    this.movement = movement;
     document.addEventListener("keydown", this.keydown);
     document.addEventListener("keyup", this.keyup);
   }
@@ -21,45 +20,29 @@ export default class Background {
     ctx.fillText("decoration", this.x, this.y + 15);
   }
   move() {
-    if (this.upPressed == true && this.player.collision !== "Top") {
+    if (
+      this.movement.upPressed == true &&
+      !this.movement.collision.includes("Top")
+    ) {
       this.y += this.speed;
     }
-    if (this.downPressed == true && this.player.collision !== "Bottom") {
+    if (
+      this.movement.downPressed == true &&
+      !this.movement.collision.includes("Bottom")
+    ) {
       this.y -= this.speed;
     }
-    if (this.leftPressed == true && this.player.collision !== "Left") {
+    if (
+      this.movement.leftPressed == true &&
+      !this.movement.collision.includes("Left")
+    ) {
       this.x += this.speed;
     }
-    if (this.rightPressed == true && this.player.collision !== "Right") {
+    if (
+      this.movement.rightPressed == true &&
+      !this.movement.collision.includes("Right")
+    ) {
       this.x -= this.speed;
     }
   }
-  keydown = (e) => {
-    if (e.code === "KeyW") {
-      this.upPressed = true;
-    }
-    if (e.code === "KeyS") {
-      this.downPressed = true;
-    }
-    if (e.code === "KeyA") {
-      this.leftPressed = true;
-    }
-    if (e.code === "KeyD") {
-      this.rightPressed = true;
-    }
-  };
-  keyup = (e) => {
-    if (e.code === "KeyW") {
-      this.upPressed = false;
-    }
-    if (e.code === "KeyS") {
-      this.downPressed = false;
-    }
-    if (e.code === "KeyA") {
-      this.leftPressed = false;
-    }
-    if (e.code === "KeyD") {
-      this.rightPressed = false;
-    }
-  };
 }

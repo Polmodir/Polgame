@@ -2,6 +2,8 @@ console.log("main script loaded");
 
 import Player from "./player.js";
 import Background from "./background.js";
+import BulletController from "./bulletcontroller.js";
+import Movement from "./movement.js";
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
 
@@ -10,19 +12,25 @@ canvas.height = 1050;
 
 const playerWidth = 50;
 const playerHeight = 50;
+const speed = 5;
+const movement = new Movement();
+const bulletController = new BulletController(canvas, movement, speed);
+
 const player = new Player(
   (canvas.width - playerWidth) / 2,
   (canvas.height - playerHeight) / 2,
   playerWidth,
-  playerHeight
+  playerHeight,
+  bulletController,
+  movement
 );
 const background = [
-  new Background(0, 0, 5, player),
-  new Background(150, 150, 5, player),
-  new Background(100, 100, 5, player),
-  new Background(450, 450, 5, player),
-  new Background(600, 600, 5, player),
-  new Background(750, 750, 5, player),
+  new Background(0, 0, speed, movement),
+  new Background(150, 150, speed, movement),
+  new Background(100, 100, speed, movement),
+  new Background(450, 450, speed, movement),
+  new Background(600, 600, speed, movement),
+  new Background(750, 750, speed, movement),
 ];
 var collision = [];
 function frameRateLoop() {
@@ -33,5 +41,7 @@ function frameRateLoop() {
     el.draw(ctx);
     player.collideWith(el, background, collision);
   });
+  console.log(player.shootPressed);
+  bulletController.draw(ctx);
 }
 setInterval(frameRateLoop, 1000 / 60);
